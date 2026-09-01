@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>همّة — تحفيز، عمل، وتنظيم</title>
+<meta name="theme-color" content="#FF5F3D">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="phone">
+  <div class="scroll-area">
+
+    <!-- TODAY TAB -->
+    <div class="tab active" id="tab-today">
+      <div class="top-row">
+        <div>
+          <p class="greeting-label" id="todayDate"></p>
+          <p class="greeting-name">أهلاً بيك 👋</p>
+        </div>
+        <div class="streak-badge"><span class="flame">🔥</span><span id="streakNum">0</span></div>
+      </div>
+
+      <div class="quote-card">
+        <p class="quote-eyebrow">جرعة اليوم</p>
+        <p class="quote-text" id="quoteText">ابدأ الآن، الكمال يجيك وانت ماشي مش وانت واقف.</p>
+        <button class="quote-refresh" onclick="newQuote()">↻ جرعة تانية</button>
+      </div>
+
+      <div class="progress-card">
+        <div class="ring-wrap">
+          <svg width="62" height="62">
+            <circle cx="31" cy="31" r="26" stroke="#F0E7DC" stroke-width="7" fill="none"/>
+            <circle id="ringFg" cx="31" cy="31" r="26" stroke="#FF5F3D" stroke-width="7" fill="none"
+              stroke-linecap="round" stroke-dasharray="163" stroke-dashoffset="163"/>
+          </svg>
+          <div class="ring-pct" id="ringPct">0%</div>
+        </div>
+        <div class="progress-info">
+          <p class="progress-title">إنجاز اليوم</p>
+          <p class="progress-sub" id="progressSub">لسه ما بدأتش، يلا نبدأ!</p>
+        </div>
+      </div>
+
+      <p class="section-title">مهام اليوم <span class="section-count" id="todayTaskCount"></span></p>
+      <div id="todayTaskList"></div>
+    </div>
+
+    <!-- TASKS TAB -->
+    <div class="tab" id="tab-tasks">
+      <p class="section-title" style="margin-bottom:16px;">المهام</p>
+      <div class="add-row">
+        <input type="text" id="taskInput" placeholder="اكتب مهمة جديدة...">
+        <button class="add-btn" onclick="addTask()">+</button>
+      </div>
+      <div class="priority-row" id="priorityRow">
+        <div class="priority-chip active" data-p="high" onclick="selectPriority('high')">🔴 مهم جداً</div>
+        <div class="priority-chip" data-p="mid" onclick="selectPriority('mid')">🟡 متوسط</div>
+        <div class="priority-chip" data-p="low" onclick="selectPriority('low')">🟢 بسيط</div>
+      </div>
+      <div class="reminder-row">
+        <label>🔔 وقّت تذكير (اختياري):</label>
+        <input type="time" id="taskReminder">
+      </div>
+      <div class="notif-banner" id="notifBanner" style="display:none;">
+        <span>فعّل الإشعارات عشان توصلك تذكيرات مهامك وانت شغال.</span>
+        <button onclick="requestNotifPermission()">تفعيل</button>
+      </div>
+      <div id="allTaskList"></div>
+    </div>
+
+    <!-- ROUTINE TAB -->
+    <div class="tab" id="tab-routine">
+      <p class="section-title" style="margin-bottom:16px;">روتين اليوم</p>
+
+      <div class="routine-block">
+        <div class="routine-head"><span class="routine-dot" style="background:var(--gold);"></span><span>الصبح</span></div>
+        <div id="routine-morning"></div>
+      </div>
+      <div class="routine-block">
+        <div class="routine-head"><span class="routine-dot" style="background:var(--coral);"></span><span>الضهر</span></div>
+        <div id="routine-afternoon"></div>
+      </div>
+      <div class="routine-block">
+        <div class="routine-head"><span class="routine-dot" style="background:var(--indigo);"></span><span>بالليل</span></div>
+        <div id="routine-evening"></div>
+      </div>
+
+      <p class="section-title" style="margin-bottom:10px; font-size:15px;">إضافة عنصر جديد</p>
+      <div class="routine-add" style="margin-bottom:10px;">
+        <input type="time" id="routineTime" value="08:00">
+        <input type="text" id="routineInput" placeholder="مثلاً: جري 20 دقيقة" style="flex:1; border:2px solid var(--line); border-radius:12px; padding:10px 12px; font-family:'Tajawal',sans-serif; font-size:14px;">
+      </div>
+      <select id="routinePeriod" style="width:100%; border:2px solid var(--line); border-radius:12px; padding:11px; font-family:'Tajawal',sans-serif; font-size:14px; margin-bottom:10px; background:#fff;">
+        <option value="morning">الصبح</option>
+        <option value="afternoon">الضهر</option>
+        <option value="evening">بالليل</option>
+      </select>
+      <div class="add-row" style="margin-bottom:0;">
+        <button class="add-btn" style="width:100%; border-radius:14px;" onclick="addRoutine()">إضافة للروتين</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-btn active" data-tab="today" onclick="switchTab('today')"><span class="ic">☀️</span>اليوم</button>
+    <button class="nav-btn" data-tab="tasks" onclick="switchTab('tasks')"><span class="ic">✅</span>المهام</button>
+    <button class="nav-btn" data-tab="routine" onclick="switchTab('routine')"><span class="ic">🗓️</span>الروتين</button>
+  </div>
+
+  <div class="push-toast" id="pushToast">
+    <span class="icon">⏰</span>
+    <p><strong id="pushToastTitle">تذكير</strong><span id="pushToastBody"></span></p>
+  </div>
+</div>
+
+<div class="toast-overlay" id="wisdomOverlay">
+  <div class="toast-card">
+    <div class="toast-eyebrow"><span class="tag">إلهام لمهمتك</span></div>
+    <p class="toast-quote" id="wisdomQuote"></p>
+    <p class="toast-author" id="wisdomAuthor"></p>
+    <button class="toast-close" onclick="closeWisdom()">يلا نبدأ 💪</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

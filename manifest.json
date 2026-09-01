@@ -1,0 +1,26 @@
+{
+  "name": "همّة - تحفيز وعمل وتنظيم",
+  "short_name": "همّة",
+  "description": "تطبيق يومي للتحفيز، إدارة المهام، وتنظيم الروتين",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#EDE3F5",
+  "theme_color": "#FF5F3D",
+  "orientation": "portrait",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
